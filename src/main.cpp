@@ -10,7 +10,7 @@
 int main()
 {
     cv::VideoCapture webcam(0);
-    cv::Mat img;
+    cv::Mat webFrame;
 
     std::vector<std::string> img_names;
     readImages(img_names);
@@ -21,25 +21,31 @@ int main()
     //resizing the current slide to fit my laptop screen 
     cv::resize(currentSlide,currentSlide,cv::Size((int)(1366/1.1),(int)(768/1.1)));
     //current img of the presentation
-    std::cout<<currentSlide.size().width<<" "<<currentSlide.size().height<<std::endl;
+    //std::cout<<currentSlide.size().width<<" "<<currentSlide.size().height<<std::endl;
        
     
     //fix::have to update the window name to the name of the presentation
-    cv::imshow("Slide",currentSlide);
     cv::waitKey(0);
     
-    cv::Mat webSlide;
     uint32_t webcam_height=273,webcam_width=153; //web camera fixed dimensions
-    bool isSuccess=webcam.read(img);
+    bool isSuccess=webcam.read(webFrame);
     if(isSuccess)
     {
         while(true)
         {
-            webcam.read(img);
+            webcam.read(webFrame);
             //adjusting the webcam, making it smaller and fixing it on top right of the presentation
-            cv::resize(img,img,cv::Size(webcam_height,webcam_width));
-            cv::imshow("Web Camera",img);
-            
+            cv::resize(webFrame,webFrame,cv::Size(webcam_height,webcam_width));
+            //creating a region of interest in slide to place webcam
+            //roi(Point(originx,originy),Size(width,height))
+            cv::Rect roi(cv::Point((currentSlide.size().width-webcam_height),0),cv::Size(webcam_height,webcam_width)); 
+            //cv::rectangle(currentSlide,roi,cv::Scalar(255,0,0));
+            webFrame.copyTo(currentSlide(roi));
+
+
+            //cv::imshow("Web Camera",webFrame);
+            cv::imshow("Slide",currentSlide);
+
             char keyEntered=cv::waitKey(1);
             if(keyEntered=='q')
             {

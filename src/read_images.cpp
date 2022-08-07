@@ -6,7 +6,7 @@
 //this function will read all the images from a given path
 void readImages(std::vector<std::string>& rimg_names)
 {
-    std::string path="../Resources/test/";
+    std::string path="Resources/test/";
     //std::vector<std::string> img_names;
     for(uint32_t i=0;i<9;i++)
     {
@@ -14,6 +14,6 @@ void readImages(std::vector<std::string>& rimg_names)
         path=path+ch+".png";
         rimg_names.push_back(path);
         //std::cout<<rimg_names[i]<<std::endl;
-        path="../Resources/test/";
+        path="Resources/test/";
     }
 }

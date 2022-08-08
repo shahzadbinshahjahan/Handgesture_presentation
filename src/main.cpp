@@ -11,6 +11,8 @@ int main()
 {
     cv::VideoCapture webcam(0);
     cv::Mat webFrame;
+    //fix::Mat object to hold the original webcam size during developing
+    //cv::Mat tempWebcam;    
 
     std::vector<std::string> img_names;
     readImages(img_names);
@@ -34,6 +36,7 @@ int main()
         while(true)
         {
             webcam.read(webFrame);
+            cv::flip(webFrame,webFrame,1); //making the webcam mirrored
             //adjusting the webcam, making it smaller and fixing it on top right of the presentation
             cv::resize(webFrame,webFrame,cv::Size(webcam_height,webcam_width));
             //creating a region of interest in slide to place webcam
@@ -43,7 +46,7 @@ int main()
             webFrame.copyTo(currentSlide(roi));
 
 
-            //cv::imshow("Web Camera",webFrame);
+            //cv::imshow("Web Camera",tempWebcam);
             cv::imshow("Slide",currentSlide);
 
             char keyEntered=cv::waitKey(1);
